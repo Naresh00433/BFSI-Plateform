@@ -1,4 +1,4 @@
-import bcrypt from "bcryptjs";
+import { Password } from "@/lib/auth";
 import { RegisterInput } from "../validations/register.schema";
 import { UserRepository } from "../repositories/user.repository";
 
@@ -25,7 +25,7 @@ export class RegisterService {
       }
     }
 
-    const passwordHash = await bcrypt.hash(data.password, 12);
+    const passwordHash = await Password.hash(data.password);
 
     const user = await this.userRepository.create({
       firstName: data.firstName,

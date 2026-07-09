@@ -1,34 +1,43 @@
 import { prisma } from "@/lib/prisma/client";
 import { User } from "@prisma/client";
 
+export interface CreateUserData {
+  firstName: string;
+  lastName: string;
+  email?: string;
+  phone?: string;
+  passwordHash: string;
+}
+
 export class UserRepository {
   async findByEmail(email: string): Promise<User | null> {
     return prisma.user.findUnique({
-      where: {
-        email,
-      },
+      where: { email },
     });
   }
 
   async findByPhone(phone: string): Promise<User | null> {
     return prisma.user.findUnique({
+      where: { phone },
+    });
+  }
+
+  async findByEmailOrPhone(identifier: string): Promise<User | null> {
+    return prisma.user.findFirst({
       where: {
-        phone,
+        OR: [
+          { email: identifier },
+          { phone: identifier },
+        ],
       },
     });
   }
 
-  async create(data: {
-    firstName: string;
-    lastName: string;
-    email?: string;
-    phone?: string;
-    passwordHash: string;
-  }): Promise<User> {
+  async create(data: CreateUserData): Promise<User> {
     return prisma.user.create({
       data: {
-        email: data.email || null,
-        phone: data.phone || null,
+        email: data.email ?? null,
+        phone: data.phone ?? null,
         passwordHash: data.passwordHash,
 
         profile: {
