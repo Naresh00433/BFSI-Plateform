@@ -1,6 +1,7 @@
 import { Password } from "@/lib/auth";
 import { RegisterInput } from "../validations/register.schema";
 import { UserRepository } from "../repositories/user.repository";
+import { UserMapper } from "../utils/user.mapper";
 
 export class RegisterService {
   private readonly userRepository = new UserRepository();
@@ -35,6 +36,6 @@ export class RegisterService {
       passwordHash,
     });
 
-    return user;
+    return UserMapper.toResponse(user);
   }
 }

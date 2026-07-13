@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/prisma/client";
 import { User } from "@prisma/client";
+import { UserWithRelations } from "../types/user-with-relations";
 
 export interface CreateUserData {
   firstName: string;
@@ -22,13 +23,28 @@ export class UserRepository {
     });
   }
 
-  async findByEmailOrPhone(identifier: string): Promise<User | null> {
+  async findByEmailOrPhone(
+    identifier: string,
+  ): Promise<UserWithRelations | null> {
     return prisma.user.findFirst({
       where: {
+        deletedAt: null,
         OR: [
-          { email: identifier },
-          { phone: identifier },
+          {
+            email: identifier,
+          },
+          {
+            phone: identifier,
+          },
         ],
+      },
+      include: {
+        profile: true,
+        roles: {
+          include: {
+            role: true,
+          },
+        },
       },
     });
   }
