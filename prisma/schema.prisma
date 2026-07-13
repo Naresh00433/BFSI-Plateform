@@ -129,6 +129,139 @@ model OtpVerification {
   @@map("otp_verifications")
 }
 
+model Bank {
+  id           String     @id @default(uuid()) @db.Uuid
+  name         String     @unique
+  slug         String     @unique
+  shortName    String?    @map("short_name")
+  description  String?    @db.Text
+  website      String?
+  supportEmail String?    @map("support_email")
+  supportPhone String?    @map("support_phone")
+  logo         String?
+  priority     Int        @default(0)
+  status       BankStatus @default(ACTIVE)
+  createdAt    DateTime   @default(now()) @map("created_at")
+  updatedAt    DateTime   @updatedAt @map("updated_at")
+  deletedAt    DateTime?  @map("deleted_at")
+
+  categories Category[]
+  products   Product[]
+
+  @@map("banks")
+}
+
+model Category {
+  id     String @id @default(uuid()) @db.Uuid
+  bankId String @db.Uuid
+
+  name        String
+  slug        String
+  description String? @db.Text
+
+  icon String?
+
+  priority Int @default(0)
+
+  status CategoryStatus @default(ACTIVE)
+
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+
+  bank Bank @relation(fields: [bankId], references: [id], onDelete: Cascade)
+
+  products Product[]
+
+  @@unique([bankId, slug])
+  @@map("categories")
+}
+
+model Product {
+  id String @id @default(uuid()) @db.Uuid
+
+  bankId String @db.Uuid
+
+  categoryId String @db.Uuid
+
+  name String
+
+  slug String
+
+  shortDescription String? @map("short_description")
+
+  description String? @db.Text
+
+  logo String?
+
+  banner String?
+
+  commission Decimal @db.Decimal(10, 2)
+
+  processingTime String? @map("processing_time")
+
+  minimumIncome Decimal? @map("minimum_income") @db.Decimal(12, 2)
+
+  minimumAge Int? @map("minimum_age")
+
+  maximumAge Int? @map("maximum_age")
+
+  priority Int @default(0)
+
+  status ProductStatus @default(DRAFT)
+
+  createdAt DateTime @default(now()) @map("created_at")
+
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  deletedAt DateTime? @map("deleted_at")
+
+  bank Bank @relation(fields: [bankId], references: [id], onDelete: Cascade)
+
+  category Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  faqs ProductFaq[]
+
+  documents ProductDocument[]
+
+  @@unique([bankId, slug])
+  @@map("products")
+}
+
+model ProductFaq {
+  id String @id @default(uuid()) @db.Uuid
+
+  productId String @db.Uuid
+
+  question String
+
+  answer String @db.Text
+
+  sortOrder Int @default(0)
+
+  createdAt DateTime @default(now()) @map("created_at")
+
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@map("product_faqs")
+}
+
+model ProductDocument {
+  id String @id @default(uuid()) @db.Uuid
+
+  productId String @db.Uuid
+
+  name String
+
+  required Boolean @default(true)
+
+  createdAt DateTime @default(now()) @map("created_at")
+
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@map("product_documents")
+}
+
 enum UserStatus {
   PENDING
   ACTIVE
@@ -153,4 +286,20 @@ enum OtpType {
   PHONE_VERIFICATION
   LOGIN
   PASSWORD_RESET
+}
+
+enum BankStatus {
+  ACTIVE
+  INACTIVE
+}
+
+enum CategoryStatus {
+  ACTIVE
+  INACTIVE
+}
+
+enum ProductStatus {
+  DRAFT
+  ACTIVE
+  INACTIVE
 }
