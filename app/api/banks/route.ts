@@ -3,8 +3,7 @@ import { NextRequest } from "next/server";
 import { ApiResponse } from "@/lib/api-response";
 
 import { createBankSchema } from "@/features/banks/validations/bank.schema";
-import { CreateBankService } from "@/features/banks/services/create-bank.service";
-import { ListBankService } from "@/features/banks/services/list-bank.service";
+import { BankService } from "@/features/banks/services/bank.service";
 
 export async function POST(request: NextRequest) {
   try {
@@ -12,9 +11,9 @@ export async function POST(request: NextRequest) {
 
     const data = createBankSchema.parse(body);
 
-    const service = new CreateBankService();
+    const service = new BankService();
 
-    const bank = await service.execute(data);
+    const bank = await service.create(data);
 
     return ApiResponse.success(bank, "Bank created successfully");
   } catch (error) {
@@ -30,18 +29,21 @@ export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
 
-    const service = new ListBankService();
+    const service = new BankService();
 
-    const banks = await service.execute({
+    const banks = await service.findAll({
       page: Number(searchParams.get("page") ?? 1),
       limit: Number(searchParams.get("limit") ?? 10),
       search: searchParams.get("search") ?? undefined,
       status:
         (searchParams.get("status") as "ACTIVE" | "INACTIVE") ?? undefined,
       sortBy:
-        (searchParams.get("sortBy") as "name" | "priority" | "createdAt") ??
-        "priority",
-      sortOrder: (searchParams.get("sortOrder") as "asc" | "desc") ?? "asc",
+        (searchParams.get("sortBy") as
+          | "name"
+          | "priority"
+          | "createdAt") ?? "priority",
+      sortOrder:
+        (searchParams.get("sortOrder") as "asc" | "desc") ?? "asc",
     });
 
     return ApiResponse.success(banks);
