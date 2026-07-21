@@ -1,0 +1,38 @@
+export const featuredOffers = [
+  {
+    id: 1,
+    bank: "HDFC Bank",
+    product: "Millennia Credit Card",
+    offer: "5% Cashback",
+    fee: "₹999 Annual Fee",
+    badge: "LIMITED OFFER",
+    color: "from-blue-600 via-indigo-600 to-cyan-500",
+  },
+  {
+    id: 2,
+    bank: "ICICI Bank",
+    product: "Coral Credit Card",
+    offer: "Movie & Dining Rewards",
+    fee: "₹500 Annual Fee",
+    badge: "HOT",
+    color: "from-orange-500 via-red-500 to-pink-500",
+  },
+  {
+    id: 3,
+    bank: "Axis Bank",
+    product: "ACE Credit Card",
+    offer: "4% Utility Cashback",
+    fee: "₹499 Annual Fee",
+    badge: "TRENDING",
+    color: "from-emerald-500 via-green-500 to-teal-500",
+  },
+  {
+    id: 4,
+    bank: "SBI",
+    product: "Home Loan",
+    offer: "Starting @ 8.35%",
+    fee: "Processing Fee Waived",
+    badge: "NEW",
+    color: "from-violet-500 via-indigo-500 to-blue-500",
+  },
+];

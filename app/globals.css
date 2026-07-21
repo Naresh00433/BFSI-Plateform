@@ -128,3 +128,65 @@
     @apply font-mono;
   }
 }
+
+@theme {
+  --font-heading: var(--font-jakarta);
+  --font-body: var(--font-inter);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-body);
+  background: #f8fafc;
+  color: #0f172a;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-heading);
+}
+
+.section {
+  @apply py-24;
+}
+
+.container-custom {
+  @apply mx-auto max-w-7xl px-6 lg:px-8;
+}
+
+.gradient-text {
+  @apply bg-gradient-to-r from-blue-600 via-indigo-600 to-cyan-500 bg-clip-text text-transparent;
+}
+
+.glass {
+  @apply backdrop-blur-xl bg-white/70 border border-white/50 shadow-xl;
+}
+
+.card-hover {
+  @apply transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl;
+}
+
+.primary-button {
+  @apply rounded-xl bg-blue-600 px-6 py-3 text-white transition-all duration-300 hover:bg-blue-700;
+}
+
+.secondary-button {
+  @apply rounded-xl border border-slate-300 bg-white px-6 py-3 transition-all duration-300 hover:bg-slate-100;
+}
+
+@keyframes marquee {
+  from {
+    transform: translateX(0%);
+  }
+
+  to {
+    transform: translateX(-50%);
+  }
+}
