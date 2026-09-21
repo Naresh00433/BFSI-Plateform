@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Inter, Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
-import { QueryProvider } from "@/components/providers/query-provider";
+import QueryProvider from "@/components/providers/query-provider";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -38,7 +38,7 @@ export default function RootLayout({
       <body
         className={`${inter.variable} ${jakarta.variable} antialiased bg-slate-50 text-slate-900`}
       >
-        {children}
+        <QueryProvider>{children}</QueryProvider>
       </body>
     </html>
   );
